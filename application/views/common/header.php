@@ -22,7 +22,11 @@
 
     <header id="header">
       <section class="container-fluid">
-        <a href="" class="title">Test Project</a>
+        <a href="<?php print base_url(); ?>" class="title">Test Project</a>
+        
+        <?php if ( $this->session->userdata('account_id') ) : ?>
+        <a class="logout btn btn-danger pull-right" href="<?php print site_url('users/logout'); ?>">Logout</a>
+        <?php endif; ?>
       </section>
     </header>
     
