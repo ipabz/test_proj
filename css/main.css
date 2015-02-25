@@ -1,0 +1,17 @@
+#header {
+  background-color: #6f5499;
+  height: 50px;
+}
+
+#header .title {
+  color: #fff;
+  display: inline-block;
+  line-height: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.login-form {
+  margin-top: 100px;
+}
