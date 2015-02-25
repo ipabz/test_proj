@@ -16,6 +16,14 @@
   margin-top: 100px;
 }
 
+.signup-form {
+  margin-top: 60px;
+}
+
 .logout {
   margin-top: 8px;
+}
+
+.light {
+  color: #777;
 }

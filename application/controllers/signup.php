@@ -2,9 +2,19 @@
 
 class Signup extends CI_Controller {
 
+    public function __construct() {
+      parent::__construct();
+      $this->load->helper(array('form', 'url'));
+    }
+  
 	public function index()
 	{
-		$this->load->view('welcome_message');
+        $data['page_title'] = 'Sign Up';
+        $data['error'] = '';
+        
+		$this->load->view('common/header', $data);
+		$this->load->view('signup_page');
+        $this->load->view('common/footer');
 	}
     
 }

@@ -43,6 +43,9 @@
                 <button type="submit" class="btn btn-primary">Sign in</button>
               </div>
             </div>
+            <div class="pull-right">
+              <a href="<?php print site_url('signup'); ?>">Create an a ccount!</a>
+            </div>
           </div>
         </div>
       </div>
