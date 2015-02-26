@@ -92,7 +92,7 @@
   <h1>Update a person</h1>
   <h3>Request format</h3>
 
-  <label class="label label-info">PUT /person/:id</label>
+  <label class="label label-info">PUT /person/:person_id</label>
 
   <br />
   <hr />
