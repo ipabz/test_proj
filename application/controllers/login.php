@@ -6,6 +6,11 @@ class Login extends CI_Controller {
       parent::__construct();
       $this->load->helper(array('form', 'url'));
       $this->load->model('accounts');
+      
+      if ($this->session->userdata('account_id')) {
+        redirect('users');
+      }
+      
     }
   
 	public function index()
@@ -56,6 +61,41 @@ class Login extends CI_Controller {
 		$this->load->view('login_page');
         $this->load->view('common/footer');
 	}   
+    
+    public function verify_account($code)
+    {
+      $invalid = TRUE;
+      
+      if ( $userdata = $this->accounts->get_accounts(NULL, $code) ) {
+        
+        if ($userdata->num_rows() > 0) {
+          $row = $userdata->row_array();
+          
+          if (@date('Ymd', strtotime($row['verification_code_expiry'])) <= @date('Ymd', @time())) {
+            
+            $invalid = FALSE;
+            $this->accounts->verify(trim($code));
+            
+            $data['html'] = '<div class="alert alert-success">Hooray! Your account was successfully verified.</div>';
+            $data['html'] .= '<div class="text-center"><a class="btn btn-success" href="'.site_url('login').'">Proceed to login page</a></div>';
+            
+          }
+          
+        }
+        
+      }
+      
+      if ( $invalid ) {
+        $data['html'] = '<div class="alert alert-danger">Invalid Verification code!</div>';
+      }
+      
+      $data['page_title'] = 'Verify Account';
+
+      $this->load->view('common/header', $data);
+      $this->load->view('status_page');
+      $this->load->view('common/footer');
+      
+    }
     
 }
 

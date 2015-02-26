@@ -57,9 +57,7 @@ class Signup extends CI_Controller {
               
             }
             
-            
-            
-            redirect('login');
+            redirect('signup/success');
             
           } else {
             $data['error'] = 'An error occured while creating your account. Please try again in a while.';
@@ -71,6 +69,25 @@ class Signup extends CI_Controller {
 		$this->load->view('signup_page');
         $this->load->view('common/footer');
 	}
+    
+    public function success()
+    {
+      
+      $data['page_title'] = 'Sign Up Success';
+      $data['html'] = '<div class="alert alert-success">You\'ve successfully created an account. Please check your email to verify it.</div>';
+      $data['html'] .= '<div class="text-center"><a class="btn btn-success" href="'.site_url('login').'">Proceed to login page</a></div>';
+      $data['html'] .= '<br><br><br><br><br><br><div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"><strong>Note</strong></h3>
+        </div>
+        <div class="panel-body">
+          <div class="container-fluid">Since this is for testing purposes only, the accout is active after signing up. So you can already proceed to the login page.</div></div></div>';
+      
+      $this->load->view('common/header', $data);
+      $this->load->view('status_page');
+      $this->load->view('common/footer');
+      
+    }
     
 }
 

@@ -11,9 +11,27 @@ class Users extends CI_Controller {
 	public function index()
 	{
         $data['page_title'] = 'Users Page';
+        $data['home'] = 'active';
+        $data['api_key'] = '';
+        
+        $data['html'] = '<strong>Howdy '.$this->session->userdata('first_name').'!</strong>';
+        $data['html'] .= '<br><br><div class="well">Welcome to this test project.</div>';
         
 		$this->load->view('common/header', $data);
-		//$this->load->view('login');
+		$this->load->view('users_page');
+        $this->load->view('common/footer');
+	}
+    
+    public function api_key()
+	{
+        $data['page_title'] = 'Users Page';
+        $data['home'] = '';
+        $data['api_key'] = 'active';
+        
+        $data['html'] = '<strong>Your API Key</strong> <br><br><div class="well">'.$this->session->userdata('api_key').'</div>';
+        
+		$this->load->view('common/header', $data);
+		$this->load->view('users_page');
         $this->load->view('common/footer');
 	}
     

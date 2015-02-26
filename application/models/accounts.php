@@ -11,7 +11,7 @@ class Accounts extends CI_Model {
         'account_status' => 'active'
     );
     
-    $this->db->select('first_name, last_name, email_address, '.TABLE_PERSONS.'.person_id, account_id');
+    $this->db->select('first_name, last_name, email_address, '.TABLE_PERSONS.'.person_id, account_id, api_key');
     $this->db->join(TABLE_PERSONS, TABLE_ACCOUNTS.'.person_id = '.TABLE_PERSONS.'.person_id', 'inner');
     $query = $this->db->get_where(TABLE_ACCOUNTS, $conditions);
     
@@ -23,15 +23,32 @@ class Accounts extends CI_Model {
     
   }
   
-  public function get_accounts($account_id=NULL, $limit=1, $offset=0)
+  public function verify($code) {
+    
+    $this->db->where('verification_code', $code);
+    $date = @date('Y-m-d H:i:s');
+    
+    $data = array(
+        'account_status' => 'active',
+        'date_verified' => $date,
+        'last_updated' => $date
+    );
+    
+    $this->db->update(TABLE_ACCOUNTS, $data);
+    
+  }
+  
+  public function get_accounts($account_id=NULL, $verification_code=NULL, $limit=1, $offset=0)
   {
     $this->db->limit($limit, $offset);
     
     if ($account_id !== NULL) {
       $this->db->where('account_id', $account_id);
+    } else if ($verification_code !== NULL) {
+      $this->db->where('verification_code', $verification_code);
     }
     
-    $this->db->select('first_name, last_name, email_address, '.TABLE_PERSONS.'.person_id, account_id, password, account_status, '.TABLE_ACCOUNTS.'.date_created, '.TABLE_ACCOUNTS.'.last_updated');
+    $this->db->select('first_name, last_name, email_address, '.TABLE_PERSONS.'.person_id, account_id, password, account_status, '.TABLE_ACCOUNTS.'.date_created, '.TABLE_ACCOUNTS.'.last_updated, '.TABLE_ACCOUNTS.'.api_key');
     $this->db->join(TABLE_PERSONS, TABLE_ACCOUNTS.'.person_id = '.TABLE_PERSONS.'.person_id', 'inner');
     $query = $this->db->get(TABLE_ACCOUNTS);
     
@@ -61,6 +78,8 @@ class Accounts extends CI_Model {
       $person_id = $this->db->insert_id();
       $code = $this->generate_secure_keys(trim($data['email_address']), $data['password'], TRUE);
       $verification_code = sha1($code);
+      $api_key = sha1($verification_code . $code . $person_id . time());
+      
       
       $account_data = array(
           'person_id' => $person_id,
@@ -68,6 +87,7 @@ class Accounts extends CI_Model {
           'password' => $code,
           'account_status' => DEFAULT_ACCOUNT_STATUS,
           'verification_code' => $verification_code,
+          'api_key' => $api_key,
           'verification_code_expiry' => strtotime('+1 day', time()),
           'date_created' => $datetime,
           'last_updated' => $datetime
