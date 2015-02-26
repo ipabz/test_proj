@@ -14,7 +14,7 @@ class Users extends CI_Controller {
         $data['home'] = 'active';
         $data['api_key'] = '';
         
-        $data['html'] = '<strong>Howdy '.$this->session->userdata('first_name').'!</strong>';
+        $data['html'] = '<strong>Howdy '.ucwords($this->session->userdata('first_name')).'!</strong>';
         $data['html'] .= '<br><br><div class="well">Welcome to this test project.</div>';
         
 		$this->load->view('common/header', $data);
@@ -29,6 +29,8 @@ class Users extends CI_Controller {
         $data['api_key'] = 'active';
         
         $data['html'] = '<strong>Your API Key</strong> <br><br><div class="well">'.$this->session->userdata('api_key').'</div>';
+        
+        $data['html'] .= $this->load->view('api_page', array('api_key'=>$this->session->userdata('api_key')), TRUE);
         
 		$this->load->view('common/header', $data);
 		$this->load->view('users_page');
