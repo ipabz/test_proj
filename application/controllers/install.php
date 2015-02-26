@@ -13,7 +13,7 @@ class Install extends CI_Controller {
       $this->load->library('migration');
       $success = $this->migration->current();
       
-      $data['page_title'] = 'Sign Up Success';
+      $data['page_title'] = 'Install';
       
       if ( $success ) {        
         
