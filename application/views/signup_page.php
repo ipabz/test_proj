@@ -38,7 +38,7 @@
             <div class="form-group">
               <label for="inputEmail4" class="col-sm-2 control-label">Repeat Email</label>
               <div class="col-sm-10">
-                <input type="email" name="email_address" class="form-control" id="inputEmail4" placeholder="Repeat Email" value="<?php print set_value('email_address'); ?>">
+                <input type="email" name="repeat_email_address" class="form-control" id="inputEmail4" placeholder="Repeat Email" value="<?php print set_value('email_address'); ?>">
               </div>
             </div>
             <div class="form-group">
@@ -50,17 +50,21 @@
             <div class="form-group">
               <label for="inputGender" class="col-sm-2 control-label">Gender</label>
               <div class="col-sm-10">
-                <select class="form-control" id="inputGender">
-                  <option value=""></option>
-                  <option value="M">Male</option>
-                  <option value="F">Female</option>
-                </select>
+                <?php
+                $gender_data = array(
+                    '' => '',
+                    'M' => 'Male',
+                    'F' => 'Female'
+                );
+                
+                print form_dropdown('gender', $gender_data, $this->input->post('gender', TRUE), 'name="gender" class="form-control" id="inputGender"');
+                ?>
               </div>
             </div>
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
                 <div class="checkbox">
-                  <span class="light">By clicking Create Account, you agree to our Terms and that you have read our Data Policy, including our Cookie Use.</span>
+                  <span class="light">By clicking Create Account, you agree to our <a href="">Terms</a> and that you have read our <a href="">Data Policy</a>, including our <a href="">Cookie Use</a>.</span>
                 </div>
               </div>
             </div>
@@ -75,4 +79,4 @@
     <?php print form_close(); ?>
     <div class="col-md-3"></div>
   </div>
-</section>    
+</section>    <br /><br />

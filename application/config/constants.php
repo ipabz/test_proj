@@ -36,6 +36,12 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+// For production use set this to inactive
+define('DEFAULT_ACCOUNT_STATUS', 'active');
+
+// For production use set this to TRUE.
+// Setting this to TRUE makes the application to send any emails specially verification email on the signup form
+define('SEND_EMAIL', FALSE);
 
 
 // Database Tables

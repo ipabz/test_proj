@@ -41,6 +41,8 @@
 $route['default_controller'] = "login";
 $route['404_override'] = '';
 
+$route['account/verify/(:any)'] = "login/verify_account/$1";
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
