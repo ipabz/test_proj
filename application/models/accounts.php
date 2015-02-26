@@ -67,8 +67,8 @@ class Accounts extends CI_Model {
       $datetime = @date('Y-m-d H:i:s');
 
       $person_data = array(
-          'first_name' => $data['first_name'],
-          'last_name' => $data['last_name'],
+          'first_name' => strtolower($data['first_name']),
+          'last_name' => strtolower($data['last_name']),
           'gender' => $data['gender'],
           'date_created' => $datetime,
           'last_updated' => $datetime
@@ -111,6 +111,65 @@ class Accounts extends CI_Model {
       return $hash;
     } else {
       echo $hash;
+    }
+    
+  }
+  
+  public function validate_api_key($key)
+  {
+    
+    $this->db->where('api_key', $key);
+    $query = $this->db->get(TABLE_ACCOUNTS);
+    
+    if ($query->num_rows() > 0) {
+      return TRUE;
+    }
+    
+    return FALSE;
+    
+  }
+  
+  public function update($data=array())
+  {
+    $date = @date('Y-m-d H:i:s');
+    
+    $person_data = array(
+        'first_name' => strtolower(trim($data['first_name'])),
+        'last_name' => strtolower(trim($data['last_name'])),
+        'gender' => trim($data['gender']),
+        'last_updated' => $date
+    );
+    
+    $this->db->where('person_id', $data['person_id']);
+    $this->db->update(TABLE_PERSONS, $person_data);
+    
+    $account_data = array(
+        'account_status' => $data['account_status'] 
+    );
+    
+    $this->db->where('account_id', $data['account_id']);
+    $this->db->update(TABLE_ACCOUNTS, $account_data);
+    
+    
+  }
+  
+  public function get($conditions=array(), $limit=100,$offset=0)
+  {
+    
+    $this->db->limit($limit, $offset);
+    
+    if (count($conditions) > 0) {
+      $this->db->where($conditions);
+    }
+    
+    $this->db->select('first_name, last_name, email_address, '.TABLE_PERSONS.'.person_id, account_id, password, account_status, '.TABLE_ACCOUNTS.'.date_created, '.TABLE_ACCOUNTS.'.last_updated, '.TABLE_ACCOUNTS.'.api_key, gender');
+    $this->db->join(TABLE_PERSONS, TABLE_ACCOUNTS.'.person_id = '.TABLE_PERSONS.'.person_id', 'inner');
+    $query = $this->db->get(TABLE_ACCOUNTS);
+    
+    if ($query->num_rows() > 0) {
+      return $query;
+    } else {
+      return FALSE;
     }
     
   }
