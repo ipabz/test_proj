@@ -40,7 +40,7 @@ class V1 extends REST_Controller {
       $people = FALSE;
       
       if ($query) {
-        $people = $query->result_array();
+        $people = $query;
       }
 
       if($people) {
@@ -73,7 +73,7 @@ class V1 extends REST_Controller {
         
         if ($query) {
           
-          $person = $query->row_array();
+          $person = $query;
  
           if ($this->put('first_name')) { 
             $person['first_name'] = $this->put('first_name');

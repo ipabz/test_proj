@@ -2,6 +2,15 @@
 
 class Accounts extends CI_Model {
   
+  public function __construct() {
+    parent::__construct();
+    
+    if ( MEMCACHE ) {
+      $this->load->library('memcached_library'); 
+    }
+    
+  }
+  
   public function validate($email_address, $password)
   {
     
@@ -155,18 +164,51 @@ class Accounts extends CI_Model {
   
   public function get($conditions=array(), $limit=100,$offset=0)
   {
+    $query = NULL;
     
-    $this->db->limit($limit, $offset);
-    
-    if (count($conditions) > 0) {
-      $this->db->where($conditions);
+    if ( MEMCACHE ) {
+      
+      $key = trim( implode('', str_replace(' ', '_', $conditions)) );
+      
+      if ($key === '') {
+        $key = 'all_people';
+      }
+      
+      $query = $this->memcached_library->get($key);
+      
+      if (trim($query) !== '') {
+        $query = json_decode($query);
+      }
+      
     }
     
-    $this->db->select('first_name, last_name, email_address, '.TABLE_PERSONS.'.person_id, account_id, password, account_status, '.TABLE_ACCOUNTS.'.date_created, '.TABLE_ACCOUNTS.'.last_updated, '.TABLE_ACCOUNTS.'.api_key, gender');
-    $this->db->join(TABLE_PERSONS, TABLE_ACCOUNTS.'.person_id = '.TABLE_PERSONS.'.person_id', 'inner');
-    $query = $this->db->get(TABLE_ACCOUNTS);
+    if (!$query) {
     
-    if ($query->num_rows() > 0) {
+      $this->db->limit($limit, $offset);
+
+      if (count($conditions) > 0) {
+        $this->db->where($conditions);
+      }
+
+      $this->db->select('first_name, last_name, email_address, '.TABLE_PERSONS.'.person_id, account_id, password, account_status, '.TABLE_ACCOUNTS.'.date_created, '.TABLE_ACCOUNTS.'.last_updated, '.TABLE_ACCOUNTS.'.api_key, gender');
+      $this->db->join(TABLE_PERSONS, TABLE_ACCOUNTS.'.person_id = '.TABLE_PERSONS.'.person_id', 'inner');
+      $query = $this->db->get(TABLE_ACCOUNTS);
+      
+      if ($limit === 1) {
+        $result = $query->row_array();
+      } else {
+        $result = $query->result_array();
+      }
+      
+      if ( MEMCACHE ) {        
+        $this->memcached_library->add($key, json_encode($result));
+      }
+      
+      $query = $result;
+    
+    }
+    
+    if (count($query) > 0) {
       return $query;
     } else {
       return FALSE;

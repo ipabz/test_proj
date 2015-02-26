@@ -43,6 +43,8 @@ define('DEFAULT_ACCOUNT_STATUS', 'active');
 // Setting this to TRUE makes the application to send any emails specially verification email on the signup form
 define('SEND_EMAIL', FALSE);
 
+// Set to true if you installed memcache and want to use it
+define('MEMCACHE', FALSE);
 
 // Database Tables
 define('TABLE_PERSONS', 'persons');
