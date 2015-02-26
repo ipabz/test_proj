@@ -38,7 +38,7 @@
             <div class="form-group">
               <label for="inputEmail4" class="col-sm-2 control-label">Repeat Email</label>
               <div class="col-sm-10">
-                <input type="email" name="repeat_email_address" class="form-control" id="inputEmail4" placeholder="Repeat Email" value="<?php print set_value('email_address'); ?>">
+                <input type="email" name="repeat_email_address" class="form-control" id="inputEmail4" placeholder="Repeat Email" value="<?php print set_value('repeat_email_address'); ?>">
               </div>
             </div>
             <div class="form-group">

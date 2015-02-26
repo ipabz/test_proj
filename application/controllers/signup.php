@@ -18,7 +18,7 @@ class Signup extends CI_Controller {
         $this->form_validation->set_rules('first_name', 'First Name', 'required'); 
         $this->form_validation->set_rules('last_name', 'Last Name', 'required');
         $this->form_validation->set_rules('email_address', 'Email Address', 'required|valid_email');
-        $this->form_validation->set_rules('repeat_email_address', 'Repeat Email Address', 'required|valid_email');
+        $this->form_validation->set_rules('repeat_email_address', 'Repeat Email Address', 'required|matches[email_address]');
         $this->form_validation->set_rules('password', 'Password', 'required');
         $this->form_validation->set_rules('gender', 'Gender', 'required');
         
