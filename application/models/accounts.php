@@ -177,7 +177,7 @@ class Accounts extends CI_Model {
       $query = $this->memcached_library->get($key);
       
       if (trim($query) !== '') {
-        $query = json_decode($query);
+        $query = (array)json_decode($query);
       }
       
     }
@@ -194,7 +194,7 @@ class Accounts extends CI_Model {
       $this->db->join(TABLE_PERSONS, TABLE_ACCOUNTS.'.person_id = '.TABLE_PERSONS.'.person_id', 'inner');
       $query = $this->db->get(TABLE_ACCOUNTS);
       
-      if ($limit === 1) {
+      if ($limit > 0 && $limit < 2) {
         $result = $query->row_array();
       } else {
         $result = $query->result_array();
